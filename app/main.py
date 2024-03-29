@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pydeck as pdk
 
 DATA_URL = (
     "../Motor_Vehicle_Collisions_-_Crashes.csv"
@@ -20,18 +21,30 @@ def load_data(nrows):
     return data
 
 data = load_data(100000)
-
+# Map
 st.header("Where are the most people injured in NYC?")
 injured_people = st.slider("Number of persons injured in vehicle collisions", 0, 19) # 19 turned out to be the max
 st.map(data.query("injured_persons >= @injured_people")[["latitude", "longitude"]].dropna(how="any")) # Showcase map with selected data
-
+# Hourly
 st.header("How many collisions occur during a given time of day?")
 hour = st.slider("Hour to look at", 0, 23)
 data = data[data["date/time"].dt.hour == hour] # Sort dataset by given hour
 
 st.markdown("Vehicle collisions between %i:00 and %i:00" % (hour, (hour + 1) % 24))
+midpoint = (np.average(data["latitude"]), np.average(data["longitude"])) # We want our map to zoom in on this point
+# 3D map, 1st layer
+st.write(pdk.Deck(
+    map_style="mapbox://styles/mapbox/light-v9", # Arbitrary style choice
+    initial_view_state={
+        "latitude": midpoint[0],
+        "longitude": midpoint[1],
+        "zoom": 11, # Arbitrary
+        "pitch": 50 # Arbitrary
+    }
 
+))
 
+# Raw
 if st.checkbox("Show Raw Data", False): # Optionally look over raw data
     st.subheader('Raw Data')
     st.write(data)
