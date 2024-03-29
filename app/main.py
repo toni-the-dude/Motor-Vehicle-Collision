@@ -25,6 +25,12 @@ st.header("Where are the most people injured in NYC?")
 injured_people = st.slider("Number of persons injured in vehicle collisions", 0, 19) # 19 turned out to be the max
 st.map(data.query("injured_persons >= @injured_people")[["latitude", "longitude"]].dropna(how="any")) # Showcase map with selected data
 
+st.header("How many collisions occur during a given time of day?")
+hour = st.slider("Hour to look at", 0, 23)
+data = data[data["date/time"].dt.hour == hour]
+
+
+
 
 if st.checkbox("Show Raw Data", False): # Optionally look over raw data
     st.subheader('Raw Data')
