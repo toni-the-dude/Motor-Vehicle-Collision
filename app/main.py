@@ -21,6 +21,11 @@ def load_data(nrows):
 
 data = load_data(100000)
 
-if st.checkbox("Show Raw Data", False):
+st.header("Where are the most people injured in NYC?")
+injured_people = st.slider("Number of persons injured in vehicle collisions", 0, 19) # 19 turned out to be the max
+st.map(data.query("injured_persons >= @injured_people")[["latitude", "longitude"]].dropna(how="any")) # Showcase map with selected data
+
+
+if st.checkbox("Show Raw Data", False): # Optionally look over raw data
     st.subheader('Raw Data')
     st.write(data)
