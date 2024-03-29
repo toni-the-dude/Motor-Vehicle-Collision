@@ -21,5 +21,6 @@ def load_data(nrows):
 
 data = load_data(100000)
 
-st.subheader('Raw Data')
-st.write(data)
+if st.checkbox("Show Raw Data", False):
+    st.subheader('Raw Data')
+    st.write(data)
