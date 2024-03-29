@@ -10,7 +10,7 @@ st.title("Motor Vehicle Collisions in New York City")
 st.markdown("This application is a Streamlit dashboard that can be used "
              "to analyze motor vehicle collisions in NYC")
 
-@st.cache(persist=True) # Do not redo computations every time the app is rerun (unless the code is changed)
+@st.cache_data(persist=True) # Do not redo computations every time the app is rerun (unless the code is changed)
 def load_data(nrows):
     data = pd.read_csv(DATA_URL, nrows=nrows, parse_dates=[["CRASH_DATE", "CRASH_TIME"]]) # Read nrows from DATA_URL and format date, time
     data.dropna(subset=["LATITUDE", "LONGITUDE"], inplace=True) # Drop missing values; they might break the map
@@ -27,9 +27,9 @@ st.map(data.query("injured_persons >= @injured_people")[["latitude", "longitude"
 
 st.header("How many collisions occur during a given time of day?")
 hour = st.slider("Hour to look at", 0, 23)
-data = data[data["date/time"].dt.hour == hour]
+data = data[data["date/time"].dt.hour == hour] # Sort dataset by given hour
 
-
+st.markdown("Vehicle collisions between %i:00 and %i:00" % (hour, (hour + 1) % 24))
 
 
 if st.checkbox("Show Raw Data", False): # Optionally look over raw data
