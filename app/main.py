@@ -11,7 +11,7 @@ st.title("Motor Vehicle Collisions in New York City")
 st.markdown("This application is a Streamlit dashboard that can be used "
              "to analyze motor vehicle collisions in NYC")
 
-@st.cache_data(persist=True) # Do not redo computations every time the app is rerun (unless the code is changed)
+@st.cache_data # Do not redo computations every time the app is rerun (unless the code is changed)
 def load_data(nrows):
     data = pd.read_csv(DATA_URL, nrows=nrows, parse_dates=[["CRASH_DATE", "CRASH_TIME"]]) # Read nrows from DATA_URL and format date, time
     data.dropna(subset=["LATITUDE", "LONGITUDE"], inplace=True) # Drop missing values; they might break the map
@@ -32,7 +32,7 @@ data = data[data["date/time"].dt.hour == hour] # Sort dataset by given hour
 
 st.markdown("Vehicle collisions between %i:00 and %i:00" % (hour, (hour + 1) % 24))
 midpoint = (np.average(data["latitude"]), np.average(data["longitude"])) # We want our map to zoom in on this point
-# 3D map, 1st layer
+# 3D map, first layer
 st.write(pdk.Deck(
     map_style="mapbox://styles/mapbox/light-v9", # Arbitrary style choice
     initial_view_state={
@@ -40,9 +40,22 @@ st.write(pdk.Deck(
         "longitude": midpoint[1],
         "zoom": 11, # Arbitrary
         "pitch": 50 # Arbitrary
-    }
-
+    },
+    layers=[
+        pdk.Layer( # Second layer, related to the columns on the map
+            "HexagonLayer", # Arbitrary shape
+            data=data[["date/time", "latitude", "longitude"]], # Subset of data
+            get_position=["longitude", "latitude"],
+            radius=100, # Radius of the chosen shape
+            extruded=True, # Turns our shape 3D
+            pickable=True,
+            elevation_scale=4, # Height multiplier
+            elevation_range=[0, 1000], # Height range
+        ),
+    ],
 ))
+
+
 
 # Raw
 if st.checkbox("Show Raw Data", False): # Optionally look over raw data
