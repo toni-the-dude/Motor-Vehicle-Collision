@@ -31,10 +31,13 @@
   
   ![top5](https://github.com/toni-the-dude/Motor-Vehicle-Collision/blob/main/.misc/showcase5.PNG?raw=true)
   <li>Raw</li>
-  <p></p>
+  <p>The dataset in raw format.</p>
   
   ![raw](https://github.com/toni-the-dude/Motor-Vehicle-Collision/blob/main/.misc/showcase6.PNG?raw=true)
 </ol>
 
 ## Conclusion
+
+This project provided me with insight into Data Science tools.
+
 ![cert](https://github.com/toni-the-dude/Motor-Vehicle-Collision/blob/main/.misc/showcase1.PNG?raw=true)
