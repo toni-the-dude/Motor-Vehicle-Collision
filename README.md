@@ -1,4 +1,4 @@
-# Motor-Vehicle-Collision
+# Motor Vehicle Collision
 
 ## Overview
 
